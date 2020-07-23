@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import * as serviceWorker from './serviceWorker'; 
+import Home from './components/home/home'; 
+import Navbar from './components/navbar'
+import Footer from './components/footer'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Navbar />
+    <Home />
+    <Footer />
   </React.StrictMode>,
   document.getElementById('root')
 );
