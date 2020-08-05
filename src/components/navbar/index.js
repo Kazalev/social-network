@@ -38,9 +38,9 @@ const Navbar = () => {
                         <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                             <MenuIcon />
                         </IconButton>
-                            <Typography variant="h6" className={classes.title}>
-                                News Feed
-                            </Typography>
+                        <Typography variant="h6" className={classes.title}>
+                            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }} > News Feed </Link>
+                        </Typography>
                       <Typography className={classes.welcome}>
                             Welcome, {contextType.user ? null : contextType.user.username}
                       </Typography>
