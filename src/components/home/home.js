@@ -10,12 +10,12 @@ function Home() {
     <PageLayout>
       <Grid container direction="column">
         <Grid item container>
-          <Grid xs={2} />
-          <Grid xs={8} align="center">
+          <Grid xs={2} item />
+          <Grid xs={8} item align="center">
             <PostCard />
             <PostCard />
           </Grid>
-          <Grid xs={2} />
+          <Grid xs={2} item />
         </Grid>
       </Grid>
     </PageLayout>
