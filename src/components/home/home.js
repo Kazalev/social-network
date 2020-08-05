@@ -3,19 +3,22 @@ import React from 'react';
 import './home.css';
 import { Grid } from '@material-ui/core'
 import PostCard from '../post-card'
+import PageLayout from '../page-layout';
 
 function Home() {
   return (
-    <Grid container direction="column">
-      <Grid item container>
-        <Grid xs={2} />
-        <Grid xs={8} align="center">
-          <PostCard />
-          <PostCard />
+    <PageLayout>
+      <Grid container direction="column">
+        <Grid item container>
+          <Grid xs={2} />
+          <Grid xs={8} align="center">
+            <PostCard />
+            <PostCard />
+          </Grid>
+          <Grid xs={2} />
         </Grid>
-        <Grid xs={2} />
       </Grid>
-    </Grid>
+    </PageLayout>
   );
 }
 

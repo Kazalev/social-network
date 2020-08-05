@@ -11,10 +11,12 @@ module.exports = {
 
     post: {
         register: (req, res, next) => {
-            const { username, firstName, lastName, gender, imgUrl, password } = req.body;
-            models.User.create({ username, firstName, lastName, imgUrl, gender, password })
+            const { username, firstName, lastName, email, imgUrl, password } = req.body;
+            models.User.create({ username, firstName, lastName, imgUrl, email, password })
                 .then((createdUser) => {
                   console.log(createdUser)
+                  const token = utils.jwt.createToken({ id: createdUser._id });
+                  res.header("Authorization", token)
                   return res.send(createdUser)
                 })
                 .catch((err) => {
@@ -34,7 +36,7 @@ module.exports = {
                     }
 
                     const token = utils.jwt.createToken({ id: user._id });
-                    res.cookie(config.authCookieName, token).send(user);
+                    res.header("Authorization", token).send(user);
                 })
                 .catch(next);
         },

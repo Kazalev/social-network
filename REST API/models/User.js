@@ -24,8 +24,9 @@ const userSchema = new Schema({
         required: true
     },
 
-    gender: {
-        type: String
+    email: {
+        type: String,
+        required: true
     },
 
     imgUrl: {
