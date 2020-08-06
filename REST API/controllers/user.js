@@ -14,14 +14,46 @@ module.exports = {
             const { username, firstName, lastName, email, imgUrl, password } = req.body;
             models.User.create({ username, firstName, lastName, imgUrl, email, password })
                 .then((createdUser) => {
-                  console.log(createdUser)
-                  const token = utils.jwt.createToken({ id: createdUser._id });
-                  res.header("Authorization", token)
-                  return res.send(createdUser)
+                    console.log(createdUser)
+                    const token = utils.jwt.createToken({ id: createdUser._id });
+                    res.header("Authorization", token)
+                    return res.send(createdUser)
                 })
                 .catch((err) => {
 
-                  console.log(err)
+                    console.log(err)
+                })
+        },
+
+        verifyLogin: (req, res, next) => {
+            const token = req.body.token || '';
+
+            Promise.all([
+                utils.jwt.verifyToken(token),
+                models.TokenBlacklist.findOne({ token })
+            ])
+                .then(([data, blacklistToken]) => {
+                    if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
+
+                    models.User.findById(data.id)
+                        .then((user) => {
+                            return res.send({
+                                status: true,
+                                user
+                            })
+                        });
+                })
+                .catch(err => {
+                    if (!redirectAuthenticated) { next(); return; }
+
+                    if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
+                        res.status(401).send('UNAUTHORIZED!');
+                        return;
+                    }
+
+                    res.send({
+                        status: false
+                    })
                 })
         },
 

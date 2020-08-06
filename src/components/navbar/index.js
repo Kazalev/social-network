@@ -12,6 +12,8 @@ import UserContext from '../../Context'
 const Navbar = () => {
     const classes = useStyles();
     const contextType = useContext(UserContext)
+
+    // console.log(contextType.user.username);
     
     if (!contextType.isLoggedIn) {
         return (
@@ -42,7 +44,7 @@ const Navbar = () => {
                                 News Feed
                             </Typography>
                       <Typography className={classes.welcome}>
-                            Welcome, {contextType.user ? null : contextType.user.username}
+                            Welcome, {contextType.user.username !== null ? contextType.user.username : ''}
                       </Typography>
                     </Toolbar>
                 </AppBar>
