@@ -5,6 +5,7 @@ const models = require('../models');
 module.exports = (redirectAuthenticated = true) => {
 
     return function (req, res, next) {
+        console.log(req.cookies)
         const token = req.cookies[config.authCookieName] || '';
 
         Promise.all([
