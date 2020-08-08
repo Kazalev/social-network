@@ -6,16 +6,22 @@ import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Button } from '@material-ui/core';
 import useStyles from './styles.js'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import UserContext from '../../Context'
 
 const Navbar = () => {
-    const classes = useStyles();
-    const contextType = useContext(UserContext)
+    const context = useContext(UserContext)
+    const classes = useStyles()
+    const history = useHistory()
+    const { user } = context
+    const isLoggedIn = user && user.isLoggedIn
 
-    // console.log(contextType.user.username);
-    
-    if (!contextType.isLoggedIn) {
+    const logOut = () => {
+        context.logOut()
+        history.push('/login')
+    }
+
+    if (!isLoggedIn) {
         return (
             <div className={classes.root}>
                 <AppBar position="static">
@@ -44,8 +50,9 @@ const Navbar = () => {
                             <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }} > News Feed </Link>
                         </Typography>
                       <Typography className={classes.welcome}>
-                            Welcome, {contextType.user.username !== null ? contextType.user.username : ''}
+                            Welcome, {context.user.username !== null ? user.user.username : ''}
                       </Typography>
+                      <button onClick={logOut}>Logout</button>
                     </Toolbar>
                 </AppBar>
             </div>
