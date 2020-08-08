@@ -18,14 +18,13 @@ const Login = () => {
         
         const classes = useStyles();
         const history = useHistory();
-        const contextType = useContext(UserContext)
+        const context = useContext(UserContext)
 
         const [ username, setUsername ] = useState('')
         const [ password, setPassword ] = useState('')
 
 
         const handleSubmit = async (event) => {
-            console.log(contextType.isLoggedIn);
             event.preventDefault()
     
             // Place for validations before submit  
@@ -33,8 +32,8 @@ const Login = () => {
             await authenticate('http://localhost:9999/user/login', {
                 username, password
             }, (user) => {
-                console.log('Login is successful')
-                contextType.logIn(user)
+                console.log('Login is successful', username)
+                context.logIn(user)
                 history.push("/");
             }, (e) => {
                 console.log('Error', e)
