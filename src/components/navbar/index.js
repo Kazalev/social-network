@@ -6,13 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Button } from '@material-ui/core';
 import useStyles from './styles.js'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import UserContext from '../../Context'
 
 const Navbar = () => {
     const context = useContext(UserContext)
     const classes = useStyles()
-    const history = useHistory()
     const { user } = context
     const isLoggedIn = user && user.isLoggedIn
 
