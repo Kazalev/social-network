@@ -16,11 +16,6 @@ const Navbar = () => {
     const { user } = context
     const isLoggedIn = user && user.isLoggedIn
 
-    const logOut = () => {
-        context.logOut()
-        history.push('/login')
-    }
-
     if (!isLoggedIn) {
         return (
             <div className={classes.root}>
@@ -50,9 +45,11 @@ const Navbar = () => {
                             <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }} > News Feed </Link>
                         </Typography>
                       <Typography className={classes.welcome}>
-                            Welcome, {context.user.username !== null ? user.user.username : ''}
+                        Welcome,
+                        <Link to={`/profile/${user && user.user.id}`} style={{ textDecoration: 'none', color: 'inherit' }} > 
+                        <Button color="inherit">{context.user.username !== null ? user.user.username : ''}</Button>
+                        </Link>
                       </Typography>
-                      <button onClick={logOut}>Logout</button>
                     </Toolbar>
                 </AppBar>
             </div>
