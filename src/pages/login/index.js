@@ -16,8 +16,8 @@ import UserContext from '../../Context'
 
 const Login = () => {
         
-        const classes = useStyles();
-        const history = useHistory();
+        const classes = useStyles()
+        const history = useHistory()
         const context = useContext(UserContext)
 
         const [ username, setUsername ] = useState('')
