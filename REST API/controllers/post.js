@@ -2,20 +2,22 @@ const models = require('../models');
 
 module.exports = {
     get: (req, res, next) => {
-        models.Post.find().populate('author')
+        models.Post.find().sort('-created_at').populate('author')
             .then((posts) => res.send(posts))
             .catch(next);
     },
 
     post: (req, res, next) => {
-        const { description } = req.body;
+        const { post } = req.body;
+        console.log("stiga li kole");
+        console.log(post);
         const { _id } = req.user;
 
-        models.Post.create({ description, author: _id })
+        models.Post.create({ post, author: _id })
             .then((createdPost) => {
                 return Promise.all([
                     models.User.updateOne({ _id }, { $push: { posts: createdPost } }),
-                    models.Posts.findOne({ _id: createdPost._id })
+                    models.Post.findOne({ _id: createdPost._id })
                 ]);
             })
             .then(([modifiedObj, postObj]) => {

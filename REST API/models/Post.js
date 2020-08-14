@@ -5,20 +5,15 @@ const { String, Number, Boolean, ObjectId } = Schema.Types;
 
 const postsSchema = new Schema({
 
-    description: {
+    post: {
         type: String,
         required: true,
-    },
-    
-    date: {
-        type: String
     },
 
     author: {
         type: ObjectId,
         ref: "User"
     }
-
-});
+}, { timestamps: { createdAt: 'created_at' } });
 
 module.exports = new Model('Posts', postsSchema);

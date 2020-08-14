@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const PostCard = () => {
+const PostCard = ({ post, author, created_at, index }) => {
     const classes = useStyles();
 
     return (
@@ -55,8 +55,8 @@ const PostCard = () => {
                         <MoreVertIcon />
                     </IconButton>
                 }
-                title="Shrimp and Chorizo Paella"
-                subheader="September 14, 2016"
+                title={author._id}
+                subheader={created_at}
             />
             <CardMedia
                 className={classes.media}
@@ -65,8 +65,7 @@ const PostCard = () => {
             />
             <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    This impressive paella is a perfect party dish and a fun meal to cook together with your
-                    guests. Add 1 cup of frozen peas along with the mussels, if you like.
+                    {post}
         </Typography>
             </CardContent>
             <CardActions disableSpacing>

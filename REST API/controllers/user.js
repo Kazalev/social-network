@@ -16,8 +16,7 @@ module.exports = {
                 .then((createdUser) => {
                     console.log(createdUser)
                     const token = utils.jwt.createToken({ id: createdUser._id });
-                    res.header("Authorization", token)
-                    return res.send(createdUser)
+                    res.header("Authorization", token).send(createdUser)
                 })
                 .catch((err) => {
 
