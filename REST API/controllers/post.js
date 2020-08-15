@@ -12,7 +12,7 @@ module.exports = {
             console.log(req.uer);
             const { _id } = req.user;
             console.log(_id);
-            models.Post.find({_id : ObjectId(_id)}).sort('-created_at').populate('author')
+            models.Post.find({ _id: ObjectId(_id) }).sort('-created_at').populate('author')
                 .then((posts) => res.send(posts))
                 .catch(next);
         }
@@ -37,11 +37,12 @@ module.exports = {
 
     put: (req, res, next) => {
         const id = req.params.id;
-        const { description } = req.body;
-        models.Post.updateOne({ _id: id }, { description })
+        const { post } = req.body;
+        models.Post.updateOne({ _id: id }, { post })
             .then((updatedPost) => res.send(updatedPost))
             .catch(next)
-    },
+    }
+    ,
 
     delete: (req, res, next) => {
         const id = req.params.id;

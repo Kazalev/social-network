@@ -1,8 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
-import UserContext from '../../Context';
 import getCookie from '../../utils/cookie';
 
 const useStyles = makeStyles((theme) => ({
@@ -13,13 +12,15 @@ const useStyles = makeStyles((theme) => ({
       width: '65ch',
     },
   },
+  btn: {
+    width: '65ch',
+    margin: 20
+  }
 }));
 
 
 function SharePost() {
   const classes = useStyles()
-  const context = useContext(UserContext)
-
   const [post, setPost] = useState('')
 
   const handleSubmit = async (event) => {
@@ -51,8 +52,8 @@ function SharePost() {
         multiline
         rows={3}
         variant="standard"
-      />
-      <Button variant="contained" type="submit" color="primary">Post</Button>
+      /> <br />
+      <Button className={classes.btn} variant="contained" type="submit" color="primary">Post</Button>
     </form>
   );
 }

@@ -1,6 +1,5 @@
 import React from 'react'
 import styles from './index.module.css'
-import { sizing } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
 
 const LandingPage = () => {

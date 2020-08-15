@@ -10,6 +10,12 @@ const postsSchema = new Schema({
         required: true,
     },
 
+    likes: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+
     author: {
         type: ObjectId,
         ref: "User"

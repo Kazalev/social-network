@@ -13,7 +13,6 @@ const Home = () => {
   const context = useContext(UserContext)
   const { user } = context
   const isLoggedIn = user && user.isLoggedIn
-  console.log(isLoggedIn);
 
   if (isLoggedIn) {
     return (
