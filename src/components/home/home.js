@@ -2,7 +2,6 @@ import React from 'react';
 // import logo from './logo.svg';
 import './home.css';
 import { Grid } from '@material-ui/core'
-import PostCard from '../post-card'
 import PostCards from '../post-cards'
 import PageLayout from '../page-layout';
 import SharePost from '../share-post';

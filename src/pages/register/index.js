@@ -24,6 +24,7 @@ const Register = () => {
     const [ lastName, setLastName ] = useState('')
     const [ email, setEmail ] = useState('')
     const [ username, setUsername ] = useState('')
+    const [ imgUrl, setImgUrl ] = useState('')
     const [ password, setPassword ] = useState('')
     const [ rePassword, setRePassword ] = useState('')
 
@@ -33,7 +34,7 @@ const Register = () => {
         // Place for validations before submit
 
         await authenticate('http://localhost:9999/user/register', {
-            firstName, lastName, username, email, password
+            firstName, lastName, username, email, imgUrl, password
         }, (user) => {
             console.log('Register is successful -> ', user);
             contextType.logIn(user)
@@ -107,6 +108,19 @@ const Register = () => {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    value={imgUrl}
+                                    onChange={event => setImgUrl(event.target.value)}
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    id="imgUrl"
+                                    label="Image URL"
+                                    name="imgUrl"
+                                    autoComplete="imgUrl"
                                 />
                             </Grid>
                             <Grid item xs={12}>

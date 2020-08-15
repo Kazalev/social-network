@@ -1,16 +1,25 @@
 const models = require('../models');
 
 module.exports = {
-    get: (req, res, next) => {
-        models.Post.find().sort('-created_at').populate('author')
-            .then((posts) => res.send(posts))
-            .catch(next);
+    get: {
+        getAllPosts: (req, res, next) => {
+            models.Post.find().sort('-created_at').populate('author')
+                .then((posts) => res.send(posts))
+                .catch(next);
+        },
+
+        getPostById: (req, res, next) => {
+            console.log(req.uer);
+            const { _id } = req.user;
+            console.log(_id);
+            models.Post.find({_id : ObjectId(_id)}).sort('-created_at').populate('author')
+                .then((posts) => res.send(posts))
+                .catch(next);
+        }
     },
 
     post: (req, res, next) => {
         const { post } = req.body;
-        console.log("stiga li kole");
-        console.log(post);
         const { _id } = req.user;
 
         models.Post.create({ post, author: _id })

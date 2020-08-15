@@ -8,17 +8,48 @@ import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import { CardMedia } from '@material-ui/core'
 import Spinner from '../../utils/spinner'
-import Divider from '@material-ui/core/Divider';
+import PostCard from '../../components/post-card'
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
+import PostAddIcon from '@material-ui/icons/PostAdd';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 const ProfilePage = () => {
     const [username, setUsername] = useState('')
     const [firstName, setFirstName] = useState('')
+    const [email, setEmail] = useState('')
     const [lastName, setLastName] = useState('')
     const [imgUrl, setImgUrl] = useState('')
     const [posts, setPosts] = useState('')
     const context = useContext(UserContext)
     const history = useHistory()
     const params = useParams()
+    const [open, setOpen] = useState(false);
+    const [userPosts, setUserPosts] = useState([])
+
+    const getPostById = async () => {
+        const promise = await fetch('http://localhost:9999/post')
+        const userPosts = await promise.json()
+        setUserPosts(userPosts)
+    }
+
+    const renderPosts = () => {
+        return userPosts.map((post, index) => {
+            return (
+                <PostCard key={post._id} index={index} {...post} />
+            )
+        })
+    }
+
+    useEffect(() => {
+        getPostById()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    })
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -27,15 +58,15 @@ const ProfilePage = () => {
             marginBottom: 50,
             flexGrow: 1
         },
+        cover: {
+            width: 'auto',
+            height: 285,
+        },
         photo: {
-            // height: 0,
-            // paddingTop: '56.25%', // 16:9
-            // borderRadius: 100,
             paddingTop: '81.25%',
             borderRadius: '50%',
             margin: '28px'
         },
-        photoGrid: { borderRadius: 100 },
         expand: {
             transform: 'rotate(0deg)',
             marginLeft: 'auto',
@@ -49,8 +80,8 @@ const ProfilePage = () => {
         paper: {
             padding: theme.spacing(2),
             marginBottom: theme.spacing(5),
-            marginTop: theme.spacing(5),
-            textAlign: 'center',
+            marginTop: theme.spacing(1),
+            textAlign: 'center'
         },
     }));
 
@@ -63,6 +94,7 @@ const ProfilePage = () => {
 
     const getData = async () => {
         const id = params.userID
+
         const response = await fetch(`http://localhost:9999/user?id=${id}`)
 
         if (!response.ok) {
@@ -71,11 +103,20 @@ const ProfilePage = () => {
             const user = await response.json()
             console.log(user)
             setUsername(user.username)
+            setEmail(user.email)
             setFirstName(user.firstName)
             setLastName(user.lastName)
             setImgUrl(user.imgUrl)
             setPosts(user.posts && user.posts.length)
         }
+    }
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleClickOpen = () => {
+        setOpen(true);
     }
 
     const logOut = () => {
@@ -85,9 +126,12 @@ const ProfilePage = () => {
 
     return (
         <PageLayout>
-            <Grid container spacing={3}>
-                <Grid item xs={12}> Cover photo</Grid>
-                <Grid item xs={12} sm={6}>
+            <CardMedia
+                className={classes.cover}
+                image={require("../../public/3840x1080.jpg")}
+            />
+            <Grid container justify="space-around" style={{ paddingTop: 10 }}>
+                <Grid item xs={4} sm={3}>
                     {imgUrl ? (
                         <CardMedia
                             className={classes.photo}
@@ -95,33 +139,97 @@ const ProfilePage = () => {
                             title={`Picture of ${username}`}
                         />
                     ) : (
-                            <Spinner />
+                            <CardMedia
+                                className={classes.photo}
+                                image={require("../../public/default-user.png")}
+                                title={`Picture of ${username}`}
+                            />
                         )}
+                    <Grid item xs={12}>
+                        <p style={{ fontSize: 30, textAlign: 'left', marginBottom: -25 }}><b>{firstName} {lastName}</b></p>
+                        <p style={{ fontSize: 24, textAlign: 'left', fontStyle: 'normal', fontWeight: 300, color: '#666', marginBottom: -15 }}>
+                            <AccountCircleIcon/>{username}
+                        </p>
+                        <p style={{ fontSize: 22, textAlign: 'left', marginBottom: -15 }}><PostAddIcon/>Posts: {posts}</p>
+                        <p style={{ fontSize: 18, textAlign: 'left' }}><MailOutlineIcon/><u>{email}</u></p>
+                        <Button style={{ width: "100%", marginBottom: 50 }} variant="outlined" color="primary" onClick={handleClickOpen}>Edit Profile</Button> <br />
+                        <Button variant="contained" color="secondary" onClick={logOut}>Logout</Button>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Paper className={classes.paper}>
-                        <p>User: {username}</p>
-                        <p>{firstName} {lastName}</p>
-                        <p>Posts: {posts}</p>
-                        <Grid item xs={3}>
-                            <Button variant="contained" color="secondary" onClick={logOut}>Logout</Button>
-                        </Grid>
-                    </Paper>
-                </Grid>
-            </Grid>
-
-            <Divider />
-
-            <Grid container spacing={3}>
-                <Grid item xs></Grid>
                 <Grid item xs={6}>
                     <Paper className={classes.paper}>
                         {username}'s Posts...
-                        {posts ? "POSTS..." : <Spinner />}
+                        {posts ? renderPosts() : <Spinner />}
                     </Paper>
                 </Grid>
-                <Grid item xs></Grid>
             </Grid>
+
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Edit Profile Form</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        value={firstName}
+                        onChange={event => setFirstName(event.target.value)}
+                        autoComplete="fname"
+                        name="firstName"
+                        required
+                        fullWidth
+                        id="firstName"
+                        label="First Name"
+                    />
+                    <TextField
+                        style={{marginTop: 20}}
+                        value={lastName}
+                        onChange={event => setLastName(event.target.value)}
+                        required
+                        fullWidth
+                        id="lastName"
+                        label="Last Name"
+                        name="lastName"
+                        autoComplete="lname"
+                    />
+                    <TextField
+                        style={{marginTop: 20}}
+                        value={email}
+                        onChange={event => setEmail(event.target.value)}
+                        margin="dense"
+                        id="name"
+                        label="Email Address"
+                        type="email"
+                        fullWidth
+                    />
+                    <TextField
+                        style={{marginTop: 20}}
+                        value={username}
+                        onChange={event => setUsername(event.target.value)}
+                        required
+                        fullWidth
+                        id="username"
+                        label="Username"
+                        name="username"
+                        autoComplete="username"
+                    />
+                    <TextField
+                        style={{marginTop: 20}}
+                        value={imgUrl}
+                        onChange={event => setImgUrl(event.target.value)}
+                        required
+                        fullWidth
+                        id="imgUrl"
+                        label="Image URL"
+                        name="imgUrl"
+                        autoComplete="imgUrl"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">
+                        Cancel
+          </Button>
+                    <Button onClick={handleClose} color="primary">
+                        Edit Profile
+          </Button>
+                </DialogActions>
+            </Dialog>
         </PageLayout>
     )
 }

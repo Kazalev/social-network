@@ -41,13 +41,13 @@ const useStyles = makeStyles((theme) => ({
 
 const PostCard = ({ post, author, created_at, index }) => {
     const classes = useStyles();
-
+    
     return (
         <Card className={classes.root}>
             <CardHeader
                 avatar={
                     <Avatar aria-label="recipe" className={classes.avatar}>
-                        R
+                        W
           </Avatar>
                 }
                 action={
