@@ -1,30 +1,45 @@
-import React from 'react';
-// import logo from './logo.svg';
+import React, { useContext } from 'react';
 import './home.css';
 import { Grid } from '@material-ui/core'
 import PostCards from '../post-cards'
 import PageLayout from '../page-layout';
 import SharePost from '../share-post';
 import Divider from '@material-ui/core/Divider';
+import UserContext from '../../Context';
+import LandingPage from '../../pages/landing-page';
 
-function Home() {
-  return (
-    <PageLayout>
-      <Grid container direction="column">
-        <Grid item container>
-          <Grid xs={2} item />
-          <Grid xs={8} item align="center">
-            <SharePost />
 
-            <Divider />
+const Home = () => {
+  const context = useContext(UserContext)
+  const { user } = context
+  const isLoggedIn = user && user.isLoggedIn
+  console.log(isLoggedIn);
 
-            <PostCards />
+  if (isLoggedIn) {
+    return (
+      <PageLayout>
+        <Grid container direction="column">
+          <Grid item container>
+            <Grid xs={2} item />
+            <Grid xs={8} item align="center">
+              <SharePost />
+
+              <Divider />
+
+              <PostCards />
+            </Grid>
+            <Grid xs={2} item />
           </Grid>
-          <Grid xs={2} item />
         </Grid>
-      </Grid>
-    </PageLayout>
-  );
+      </PageLayout>
+    );
+  } else {
+    return (
+      <PageLayout>
+        <LandingPage />
+      </PageLayout>
+    )
+  }
 }
 
 export default Home;

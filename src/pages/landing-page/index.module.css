@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Quicksand:wght@300&display=swap');
+
+.bg {
+    background-image: url("../../public/autumn-cars.jpg");
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1 {
+    position: absolute;
+    font-family: 'Quicksand', sans-serif;
+    color: #fff;
+    font-size: 58px;
+    top: 250px;
+    right: 31.5%;
+}
