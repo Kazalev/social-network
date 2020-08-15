@@ -1,10 +1,47 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+![react-logo](https://hackernoon.com/hn-images/1*HSisLuifMO6KbLfPOKtLow.jpeg)
+
+## Idea
+
+The project represents a very simple platform for sharing stories about travel, trips or other activities. Every user can register and log in to the platform and share their opinion about what's going on. Users have their own profile and can edit it whenever they want.
+
+## Public part
+
+**Non-Authorized user**
+* Can see the application start page.
+* Has access to register page.
+* Has access to login page.
+
+## Private part
+
+**Authorized user**
+* Can post about his adventures.
+* Has access to his Profile page.
+* Can do changes to his profile information.
+
+## Structure
+
+* Home
+* Post
+* Profile
+* Login
+* Register
+* Logout
+
+## Back-End
+* NodeJS server is located in REST API folder
+
+
 ## Available Scripts
 
 In the project directory, you can run:
 
 ### `npm start`
+
+To start the server navigate to REST API folder and run: 
+
+### `nodemon`
 
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
