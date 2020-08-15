@@ -18,6 +18,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import getCookie from '../../utils/cookie'
 
 const ProfilePage = () => {
     const [username, setUsername] = useState('')
@@ -115,6 +116,23 @@ const ProfilePage = () => {
         setOpen(false);
     };
 
+    const editProfile = () => {
+        const id = params.userID
+
+        fetch(`http://localhost:9999/user/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                username, firstName, lastName, email, imgUrl
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': getCookie('x-auth-token')
+            }
+        })
+
+        setOpen(false);
+    };
+
     const handleClickOpen = () => {
         setOpen(true);
     }
@@ -148,10 +166,10 @@ const ProfilePage = () => {
                     <Grid item xs={12}>
                         <p style={{ fontSize: 30, textAlign: 'left', marginBottom: -25 }}><b>{firstName} {lastName}</b></p>
                         <p style={{ fontSize: 24, textAlign: 'left', fontStyle: 'normal', fontWeight: 300, color: '#666', marginBottom: -15 }}>
-                            <AccountCircleIcon/>{username}
+                            <AccountCircleIcon />{username}
                         </p>
-                        <p style={{ fontSize: 22, textAlign: 'left', marginBottom: -15 }}><PostAddIcon/>Posts: {posts}</p>
-                        <p style={{ fontSize: 18, textAlign: 'left' }}><MailOutlineIcon/><u>{email}</u></p>
+                        <p style={{ fontSize: 22, textAlign: 'left', marginBottom: -15 }}><PostAddIcon />Posts: {posts}</p>
+                        <p style={{ fontSize: 18, textAlign: 'left' }}><MailOutlineIcon /><u>{email}</u></p>
                         <Button style={{ width: "100%", marginBottom: 50 }} variant="outlined" color="primary" onClick={handleClickOpen}>Edit Profile</Button> <br />
                         <Button variant="contained" color="secondary" onClick={logOut}>Logout</Button>
                     </Grid>
@@ -178,7 +196,7 @@ const ProfilePage = () => {
                         label="First Name"
                     />
                     <TextField
-                        style={{marginTop: 20}}
+                        style={{ marginTop: 20 }}
                         value={lastName}
                         onChange={event => setLastName(event.target.value)}
                         required
@@ -189,7 +207,7 @@ const ProfilePage = () => {
                         autoComplete="lname"
                     />
                     <TextField
-                        style={{marginTop: 20}}
+                        style={{ marginTop: 20 }}
                         value={email}
                         onChange={event => setEmail(event.target.value)}
                         margin="dense"
@@ -199,7 +217,7 @@ const ProfilePage = () => {
                         fullWidth
                     />
                     <TextField
-                        style={{marginTop: 20}}
+                        style={{ marginTop: 20 }}
                         value={username}
                         onChange={event => setUsername(event.target.value)}
                         required
@@ -210,7 +228,7 @@ const ProfilePage = () => {
                         autoComplete="username"
                     />
                     <TextField
-                        style={{marginTop: 20}}
+                        style={{ marginTop: 20 }}
                         value={imgUrl}
                         onChange={event => setImgUrl(event.target.value)}
                         required
@@ -225,7 +243,7 @@ const ProfilePage = () => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
           </Button>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={editProfile} color="primary">
                         Edit Profile
           </Button>
                 </DialogActions>
