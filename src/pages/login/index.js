@@ -13,35 +13,39 @@ import Container from '@material-ui/core/Container';
 import { Link, useHistory } from 'react-router-dom'
 import authenticate from '../../utils/authService'
 import UserContext from '../../Context'
+import { useSnackbar } from 'notistack';
 
 const Login = () => {
+
+    const classes = useStyles()
+    const history = useHistory()
+    const context = useContext(UserContext)
+    const { enqueueSnackbar } = useSnackbar()
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+
+        // Place for validations before submit
         
-        const classes = useStyles()
-        const history = useHistory()
-        const context = useContext(UserContext)
 
-        const [ username, setUsername ] = useState('')
-        const [ password, setPassword ] = useState('')
+        await authenticate('http://localhost:9999/user/login', {
+            username, password
+        }, (user) => {
+            console.log('Login is successful', username)
+            enqueueSnackbar(`Welcome, ${username}`, {variant: 'success'})
+            context.logIn(user)
+            history.push("/");
+        }, (e) => {
+            enqueueSnackbar(`Username or password is incorrect!`, {variant: 'error'})
+            console.log('Error', e)
+        })
 
+    }
 
-        const handleSubmit = async (event) => {
-            event.preventDefault()
-    
-            // Place for validations before submit  
-    
-            await authenticate('http://localhost:9999/user/login', {
-                username, password
-            }, (user) => {
-                console.log('Login is successful', username)
-                context.logIn(user)
-                history.push("/");
-            }, (e) => {
-                console.log('Error', e)
-            })
-        }
-
-        return (
-            <PageLayout>
+    return (
+        <PageLayout>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <div className={classes.paper}>
@@ -82,7 +86,7 @@ const Login = () => {
                                 />
                             </Grid>
                         </Grid>
-                    <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>Login</Button>
+                        <Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>Login</Button>
                         <Grid container justify="flex-end">
                             <Grid item>
                                 <Link to='/register' variant="body2">
@@ -92,11 +96,11 @@ const Login = () => {
                         </Grid>
                     </form>
                 </div>
-                <Box mt={35.5}>
+                <Box mt={29.5}>
                 </Box>
             </Container>
         </PageLayout>
-        )
+    )
 
 }
 

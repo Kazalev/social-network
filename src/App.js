@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import UserContext from './Context'
 import getCookie from './utils/cookie'
+import { SnackbarProvider } from 'notistack';
 
 const App = (props) => {
     const [user, setUser] = useState(null)
@@ -51,13 +52,15 @@ const App = (props) => {
     }
 
     return (
-        <UserContext.Provider value={{
-            user,
-            logIn,
-            logOut
-        }}>
-            {props.children}
-        </UserContext.Provider>
+        <SnackbarProvider maxSnack={3}>
+            <UserContext.Provider value={{
+                user,
+                logIn,
+                logOut
+            }}>
+                {props.children}
+            </UserContext.Provider>
+        </SnackbarProvider>
     )
 }
 

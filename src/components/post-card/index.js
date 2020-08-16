@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -14,7 +14,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import getCookie from '../../utils/cookie';
 import Badge from '@material-ui/core/Badge';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, CardMedia } from '@material-ui/core';
+import UserContext from '../../Context';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,11 +48,27 @@ const useStyles = makeStyles((theme) => ({
 
 const PostCard = (params) => {
     const classes = useStyles();
+    const context = useContext(UserContext)
     const [editFlag, setEditFlag] = useState(false)
     const [post, setPost] = useState(params.post)
     const [authorID, setAuthorID] = useState(params.author._id)
     const [createdAt, setCreatedAt] = useState(params.created_at)
     const [postID, setPostID] = useState(params._id)
+    const [isUserAuthor, setIsUserAuthor] = useState(false)
+    const { enqueueSnackbar } = useSnackbar()
+    // console.log(context.user.user.id);
+
+    useEffect(() => {
+        if (context.user !== null)
+            checkUser()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const checkUser = async () => {
+        if (authorID === context.user.user.id) {
+            setIsUserAuthor(true)
+        }
+    }
 
     const handleOpenEdit = () => {
         setEditFlag(true)
@@ -71,6 +89,7 @@ const PostCard = (params) => {
 
         setEditFlag(false)
         console.log('Post is edited successfully');
+        enqueueSnackbar('Post is edited!', { variant: 'info' })
     }
 
     const handleDelete = () => {
@@ -86,6 +105,7 @@ const PostCard = (params) => {
         })
 
         console.log('Post deleted successfully');
+        enqueueSnackbar('Post is deleted!', { variant: 'error' })
     }
 
     return (
@@ -96,11 +116,14 @@ const PostCard = (params) => {
                     title={authorID}
                     subheader={createdAt}
                 />
-                {/* <CardMedia
-                className={classes.media}
-                image="https://images.unsplash.com/photo-1447710441604-5bdc41bc6517?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80"
-                title="Paella dish"
-            /> */}
+                {params.imgUrl ? (
+
+                    <CardMedia
+                    className={classes.media}
+                    image={params.imgUrl}
+                    title="Paella dish"
+                    />
+                ) : (<div></div>)}
                 <CardContent>
                     {!editFlag ? (
                         <Typography variant="body2" color="textSecondary" component="p">
@@ -130,12 +153,16 @@ const PostCard = (params) => {
                     <IconButton aria-label="share">
                         <ShareIcon />
                     </IconButton>
-                    <IconButton aria-label="edit" onClick={handleOpenEdit}>
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton aria-label="delete" onClick={handleDelete}>
-                        <DeleteIcon />
-                    </IconButton>
+                    {isUserAuthor ? (
+                        <div>
+                            <IconButton aria-label="edit" onClick={handleOpenEdit}>
+                                <EditIcon />
+                            </IconButton>
+                            <IconButton aria-label="delete" onClick={handleDelete}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </div>
+                    ) : (<div></div>)}
                 </CardActions>
 
             </Card>

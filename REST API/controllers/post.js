@@ -9,10 +9,7 @@ module.exports = {
         },
 
         getPostById: (req, res, next) => {
-            console.log(req.uer);
-            const { _id } = req.user;
-            console.log(_id);
-            models.Post.find({ _id: ObjectId(_id) }).sort('-created_at').populate('author')
+            models.Post.find({ author: req.params.id }).sort('-created_at').populate('author')
                 .then((posts) => res.send(posts))
                 .catch(next);
         }

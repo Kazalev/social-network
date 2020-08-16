@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
-import getCookie from '../../utils/cookie';
+import getCookie from '../../utils/cookie'
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,12 +22,18 @@ const useStyles = makeStyles((theme) => ({
 
 function SharePost() {
   const classes = useStyles()
-  const [post, setPost] = useState('')
+  const [post, setPost] = useState('');
+  const { enqueueSnackbar } = useSnackbar()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
     // Place for validations before submit
+    if (post === '' || post.length < 10) {
+      return (
+        enqueueSnackbar('Post must be at least 10 symbols!', { variant: 'error' })
+      )
+    }
 
     await fetch('http://localhost:9999/post/create-post', {
       method: 'POST',
@@ -40,6 +47,7 @@ function SharePost() {
     })
 
     setPost('')
+    enqueueSnackbar('Post is successfully shared!', { variant: 'success' })
   }
 
   return (

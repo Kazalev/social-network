@@ -18,6 +18,8 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import getCookie from '../../utils/cookie'
+import SharePost from '../../components/share-post'
+import { useSnackbar } from 'notistack';
 
 const ProfilePage = () => {
     const [username, setUsername] = useState('')
@@ -31,9 +33,11 @@ const ProfilePage = () => {
     const params = useParams()
     const [open, setOpen] = useState(false);
     const [userPosts, setUserPosts] = useState([])
+    const { enqueueSnackbar } = useSnackbar()
 
     const getPostById = async () => {
-        const promise = await fetch('http://localhost:9999/post')
+        const id = params.userID
+        const promise = await fetch(`http://localhost:9999/post/userPosts/${id}`)
         const userPosts = await promise.json()
         setUserPosts(userPosts)
     }
@@ -139,6 +143,7 @@ const ProfilePage = () => {
     const logOut = () => {
         context.logOut()
         history.push('/')
+        enqueueSnackbar(`Goodbye, friend! See you soon!`, {variant: 'warning'})
     }
 
     return (
@@ -176,6 +181,7 @@ const ProfilePage = () => {
                 <Grid item xs={6}>
                     <Paper className={classes.paper}>
                         {username}'s Posts...
+                        <SharePost />
                         {posts ? renderPosts() : <Spinner />}
                     </Paper>
                 </Grid>

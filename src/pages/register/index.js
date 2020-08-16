@@ -13,31 +13,52 @@ import Container from '@material-ui/core/Container';
 import { Link, useHistory } from 'react-router-dom'
 import authenticate from '../../utils/authService'
 import UserContext from '../../Context'
+import { useSnackbar } from 'notistack';
 
 const Register = () => {
 
     const classes = useStyles();
     const history = useHistory();
     const contextType = useContext(UserContext)
-    
-    const [ firstName, setFirstName ] = useState('')
-    const [ lastName, setLastName ] = useState('')
-    const [ email, setEmail ] = useState('')
-    const [ username, setUsername ] = useState('')
-    const [ imgUrl, setImgUrl ] = useState('')
-    const [ password, setPassword ] = useState('')
-    const [ rePassword, setRePassword ] = useState('')
+
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
+    const [imgUrl, setImgUrl] = useState('')
+    const [password, setPassword] = useState('')
+    const [rePassword, setRePassword] = useState('')
+    const { enqueueSnackbar } = useSnackbar()
 
     const handleSubmit = async (event) => {
         event.preventDefault()
 
         // Place for validations before submit
+        if (firstName === '' || lastName === '' || email === '' || username === '' || imgUrl === '' || password === '') {
+            return (
+                enqueueSnackbar('All fields are required', { variant: 'error' })
+            )
+        }
 
+        if (password.length <= 3) {
+            return (
+                enqueueSnackbar('Password must be more than 3 symbols', { variant: 'error' })
+            )
+        }
+
+        if (password !== rePassword) {
+            return (
+                enqueueSnackbar('Passwords do not match!', { variant: 'error' })
+            )
+        }
+
+        
         await authenticate('http://localhost:9999/user/register', {
             firstName, lastName, username, email, imgUrl, password
         }, (user) => {
             console.log('Register is successful -> ', user);
             contextType.logIn(user)
+            enqueueSnackbar('Registration is successful! You are now logged in!', { variant: 'success' })
             history.push('/')
         }, (e) => {
             console.log('Error', e);

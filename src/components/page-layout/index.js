@@ -3,11 +3,12 @@ import Nav from '../navbar'
 import Footer from '../footer'
 
 const PageLayout = (props) => {
+
     return (
         <div>
-            <Nav />
-            <div> {props.children} </div>
-            <Footer />
+                <Nav />
+                <div> {props.children} </div>
+                <Footer />
         </div>
     );
 }
